@@ -1,0 +1,1493 @@
+(config.py)
+# config.py
+import pygame
+
+# --- Scaling Factors ---
+SCALE_FACTOR = 0.75
+SECONDARY_SCALE = 1.5 # Scale up fonts and UI elements slightly
+
+# --- Original Dimensions (for reference during scaling) ---
+ORIG_WIDTH, ORIG_HEIGHT = 1850, 950
+
+# --- Scaled Constants ---
+WIDTH = int(ORIG_WIDTH * SCALE_FACTOR)
+HEIGHT = int(ORIG_HEIGHT * SCALE_FACTOR)
+
+# --- Colors ---
+BLUE = (0, 100, 200)
+YELLOW = (255, 255, 0)
+RED = (200, 0, 0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GRAY = (150, 150, 150)
+LIGHT_GRAY = (200, 200, 200)
+MAGENTA = (255, 0, 255)
+GREEN = (0, 200, 0)
+INPUT_BOX_ACTIVE_COLOR = WHITE
+INPUT_BOX_INACTIVE_COLOR = LIGHT_GRAY
+ERROR_COLOR = (255, 100, 100)
+
+# Apply secondary scaling to sizes
+CIRCLE_RADIUS_PX = int(15 * SCALE_FACTOR * SECONDARY_SCALE)
+BOX_WIDTH_PX = int(50 * SCALE_FACTOR * SECONDARY_SCALE)
+BOX_HEIGHT_PX = int(50 * SCALE_FACTOR * SECONDARY_SCALE)
+
+# --- SI Unit Conversion (Scaled) ---
+PIXELS_PER_METER = 50 * SCALE_FACTOR
+G_METERS_PER_SEC2 = 9.81
+GRAVITY_PX_PER_SEC2 = G_METERS_PER_SEC2 * PIXELS_PER_METER
+
+# --- Vector Display (Scaled Arrow Size) ---
+VECTOR_SCALE = 0.2
+ACCELERATION_VECTOR_SCALE_MULTIPLIER = 0.3
+VECTOR_ARROW_SIZE = int(5 * SCALE_FACTOR * SECONDARY_SCALE) # Apply secondary scale
+
+# --- UI Element Dimensions (Scaled + Secondary Scale) ---
+BUTTON_WIDTH = int(140 * SCALE_FACTOR * SECONDARY_SCALE)
+BUTTON_HEIGHT = int(40 * SCALE_FACTOR * SECONDARY_SCALE)
+SMALL_BUTTON_WIDTH = int(30 * SCALE_FACTOR * SECONDARY_SCALE)
+SMALL_BUTTON_HEIGHT = int(30 * SCALE_FACTOR * SECONDARY_SCALE)
+PAUSE_BUTTON_WIDTH = int(100 * SCALE_FACTOR * SECONDARY_SCALE)
+TEXT_BOX_WIDTH = int(120 * SCALE_FACTOR * SECONDARY_SCALE)
+TEXT_BOX_HEIGHT = int(30 * SCALE_FACTOR * SECONDARY_SCALE)
+# Increase slider dimensions by 20%
+SLIDER_SCALE_INCREASE = 1.2
+SLIDER_TRACK_WIDTH = int(150 * SCALE_FACTOR * SECONDARY_SCALE * SLIDER_SCALE_INCREASE)
+SLIDER_TRACK_HEIGHT = max(1, int(10 * SCALE_FACTOR * SECONDARY_SCALE * SLIDER_SCALE_INCREASE))
+SLIDER_HANDLE_WIDTH = max(1, int(10 * SCALE_FACTOR * SECONDARY_SCALE * SLIDER_SCALE_INCREASE))
+SLIDER_HANDLE_HEIGHT = max(1, int(20 * SCALE_FACTOR * SECONDARY_SCALE * SLIDER_SCALE_INCREASE))
+FORMULA_AREA_HEIGHT = int(120 * SCALE_FACTOR * SECONDARY_SCALE)
+SLIDER_AREA_Y_START = FORMULA_AREA_HEIGHT + int(10 * SCALE_FACTOR * SECONDARY_SCALE)
+CONTROL_AREA_Y_START = HEIGHT - int(70 * SCALE_FACTOR * SECONDARY_SCALE) # Adjusted offset
+# Back Button Configuration
+BACK_BUTTON_WIDTH = int(60 * SCALE_FACTOR * SECONDARY_SCALE)
+BACK_BUTTON_HEIGHT = int(30 * SCALE_FACTOR * SECONDARY_SCALE)
+BACK_BUTTON_TEXT = "< Geri"
+# Placement offset for Back Button relative to Circle Y slider
+BACK_BUTTON_Y_OFFSET_AFTER_SLIDER = int(45 * SCALE_FACTOR * SECONDARY_SCALE) # Space below the slider label
+
+# --- Default Initial Positions (for Eğik Atış) ---
+INITIAL_CIRCLE_OFFSET_X = int(100 * SCALE_FACTOR)
+INITIAL_CIRCLE_OFFSET_Y = int(200 * SCALE_FACTOR)
+INITIAL_BOX_OFFSET_X = int(250 * SCALE_FACTOR)
+INITIAL_BOX_OFFSET_Y = int(200 * SCALE_FACTOR)
+# Calculate default positions based on offsets and dimensions
+INITIAL_CIRCLE_POS_PX = [float(INITIAL_CIRCLE_OFFSET_X), float(HEIGHT - INITIAL_CIRCLE_OFFSET_Y)]
+INITIAL_BOX_POS_PX = [float(WIDTH - INITIAL_BOX_OFFSET_X), float(HEIGHT - INITIAL_BOX_OFFSET_Y)]
+
+# --- Font Sizes (Scaled + Secondary Scale) ---
+FONT_SIZE_LARGE = int(32 * SCALE_FACTOR * SECONDARY_SCALE)
+FONT_SIZE_MEDIUM = int(28 * SCALE_FACTOR * SECONDARY_SCALE)
+FONT_SIZE_SMALL = int(20 * SCALE_FACTOR * SECONDARY_SCALE)
+FONT_SIZE_FORMULA = int(26 * SCALE_FACTOR * SECONDARY_SCALE)
+
+# --- UI Padding and Spacing (Scaled + Secondary Scale) ---
+PADDING_PX = int(20 * SCALE_FACTOR * SECONDARY_SCALE)
+SPACING_PX = int(10 * SCALE_FACTOR * SECONDARY_SCALE)
+SLIDER_X_OFFSET = int(50 * SCALE_FACTOR * SECONDARY_SCALE)
+SLIDER_Y_SPACING = int(30 * SCALE_FACTOR * SECONDARY_SCALE) # Vertical space between slider tracks
+INPUT_BOX_Y_OFFSET = int(5 * SCALE_FACTOR * SECONDARY_SCALE)
+FORMULA_CONTROLS_Y_OFFSET = FORMULA_AREA_HEIGHT // 2 - SMALL_BUTTON_HEIGHT // 2
+SPEED_MINUS_X_OFFSET = int(100 * SCALE_FACTOR * SECONDARY_SCALE)
+SPEED_PLUS_X_OFFSET = int(70 * SCALE_FACTOR * SECONDARY_SCALE)
+PAUSE_BUTTON_X_OFFSET = int(100 * SCALE_FACTOR * SECONDARY_SCALE)
+INPUT_BOX_BORDER_WIDTH = max(1, int(2 * SCALE_FACTOR * SECONDARY_SCALE))
+INPUT_TEXT_X_OFFSET = int(5 * SCALE_FACTOR * SECONDARY_SCALE)
+INPUT_TEXT_Y_OFFSET = int(5 * SCALE_FACTOR * SECONDARY_SCALE)
+INPUT_LABEL_Y_OFFSET = int(-18 * SCALE_FACTOR * SECONDARY_SCALE)
+BUTTON_BORDER_RADIUS = max(1, int(5 * SCALE_FACTOR * SECONDARY_SCALE))
+SLIDER_TRACK_BORDER_RADIUS = max(1, int(5 * SCALE_FACTOR * SECONDARY_SCALE))
+SLIDER_HANDLE_BORDER_RADIUS = max(1, int(3 * SCALE_FACTOR * SECONDARY_SCALE))
+SLIDER_LABEL_Y_OFFSET = int(2 * SCALE_FACTOR * SECONDARY_SCALE) # Space between track bottom and label top
+SLIDER_LABEL_COORD_SPACING_X = int(8 * SCALE_FACTOR * SECONDARY_SCALE)
+VECTOR_TEXT_OFFSET_X = int(5 * SCALE_FACTOR * SECONDARY_SCALE)
+VECTOR_TEXT_OFFSET_Y_UP = int(-15 * SCALE_FACTOR * SECONDARY_SCALE)
+VECTOR_TEXT_OFFSET_Y_DOWN = int(5 * SCALE_FACTOR * SECONDARY_SCALE)
+VECTOR_COMBINED_OFFSET = int(10 * SCALE_FACTOR * SECONDARY_SCALE)
+TIME_TEXT_X_OFFSET = int(10 * SCALE_FACTOR * SECONDARY_SCALE)
+TIME_TEXT_Y_OFFSET = int(20 * SCALE_FACTOR * SECONDARY_SCALE)
+FORMULA_Y_START = int(10 * SCALE_FACTOR * SECONDARY_SCALE)
+FORMULA_COL1_X = int(20 * SCALE_FACTOR * SECONDARY_SCALE)
+FORMULA_COL2_X_OFFSET = int(400 * SCALE_FACTOR * SECONDARY_SCALE) # Offset from right
+FORMULA_LINE_HEIGHT_MULTIPLIER = 1.1
+DRAW_ARROW_LINE_THICKNESS = max(1, int(2 * SCALE_FACTOR * SECONDARY_SCALE))
+FORMULA_AREA_LINE_Y_OFFSET = max(1, int(5*SCALE_FACTOR*SECONDARY_SCALE))
+FORMULA_AREA_LINE_THICKNESS = max(1, int(1*SCALE_FACTOR*SECONDARY_SCALE))
+SCENE_TITLE_Y = 5 # Y position for scene title
+
+# --- Derived UI Calculated Values ---
+FORMULA_COL2_X = WIDTH - FORMULA_COL2_X_OFFSET
+
+# Calculate total width of scaled control elements for centering
+# Need to define button widths here as they depend on SCALE_FACTOR/SECONDARY_SCALE
+TOGGLE_VEC_VIS_BUTTON_WIDTH = int(160 * SCALE_FACTOR * SECONDARY_SCALE)
+TOGGLE_VEC_MODE_BUTTON_WIDTH = int(240 * SCALE_FACTOR * SECONDARY_SCALE) # Adjusted for potentially shorter text
+TOGGLE_VEC_TYPE_BUTTON_WIDTH = int(200 * SCALE_FACTOR * SECONDARY_SCALE)
+
+TOTAL_CONTROLS_WIDTH = (
+    TEXT_BOX_WIDTH + SPACING_PX +
+    BUTTON_WIDTH + SPACING_PX +
+    BUTTON_WIDTH + SPACING_PX +
+    TOGGLE_VEC_VIS_BUTTON_WIDTH + SPACING_PX +
+    TOGGLE_VEC_MODE_BUTTON_WIDTH + SPACING_PX +
+    TOGGLE_VEC_TYPE_BUTTON_WIDTH
+)
+CONTROLS_START_X = (WIDTH - TOTAL_CONTROLS_WIDTH) // 2 # Uses scaled WIDTH
+
+# Drawable area height (excluding formula area)
+DRAWABLE_HEIGHT = HEIGHT - FORMULA_AREA_HEIGHT
+DRAWABLE_Y_OFFSET = FORMULA_AREA_HEIGHT
+
+# --- Scene Configurations ---
+SCENES = {
+    "Eğik Atış": { # Original slanted throw scene (defaults)
+        "title": "Eğik Atış Simülasyonu",
+        "initial_projectile_pos": INITIAL_CIRCLE_POS_PX, # Use default calculated positions
+        "initial_target_pos": INITIAL_BOX_POS_PX,
+        "default_time_str": "2.0",
+        "sliders_enabled": ["circle_x", "circle_y", "box_x", "box_y"], # All sliders active
+    },
+    "Dikey Atış": {
+        "title": "Dikey Atış Simülasyonu (Yukarı-Aşağı)",
+        "initial_projectile_pos": [WIDTH / 2, HEIGHT - int(100 * SCALE_FACTOR * SECONDARY_SCALE)], # Start centered, lower
+        # Target position will be dynamically set to match projectile's initial position
+        "initial_target_pos": [WIDTH / 2, HEIGHT - int(100 * SCALE_FACTOR * SECONDARY_SCALE)], # Placeholder, will be overwritten
+        "default_time_str": "3.0", # Total flight time
+        "sliders_enabled": [], # <<<--- SLIDER KALDIRILDI
+    },
+    "Yatay Atış": {
+        "title": "Yatay Atış Simülasyonu",
+        # Start high on the left
+        "initial_projectile_pos": [INITIAL_CIRCLE_OFFSET_X, HEIGHT / 3],
+        # Target on the ground, further right
+        "initial_target_pos": [WIDTH * 0.75, HEIGHT - BOX_HEIGHT_PX - PADDING_PX],
+        "default_time_str": "1.0", # Default time (will be recalculated on launch)
+        "sliders_enabled": ["circle_x", "circle_y", "box_x", "box_y"], # Enable all sliders
+    },
+}
+
+# --- Active Scene Selection ---
+# Choose which scene configuration to use by default
+ACTIVE_SCENE = "Dikey Atış" # Default to the new horizontal throw
+
+================================================================================
+
+(game_objects.py)
+# game_objects.py
+import pygame
+import config as cfg
+
+class Projectile:
+    """Represents the projectile (circle) in the simulation."""
+    def __init__(self, initial_pos_px=None):
+        self.radius = cfg.CIRCLE_RADIUS_PX
+        self.color = cfg.YELLOW
+        # Use provided initial position or default from config
+        if initial_pos_px is None:
+            self.initial_pos_px = list(cfg.INITIAL_CIRCLE_POS_PX)
+        else:
+            self.initial_pos_px = list(initial_pos_px)
+        # Current position starts at the initial position
+        self.current_pos_px = list(self.initial_pos_px)
+
+    def set_initial_position(self, pos_px):
+        """Sets both initial and current position."""
+        self.initial_pos_px = list(pos_px)
+        self.current_pos_px = list(pos_px)
+
+    def reset_to_initial(self):
+        """Resets the current position to the initial position."""
+        self.current_pos_px = list(self.initial_pos_px)
+
+    def update_position(self, new_pos_px):
+        """Updates the current position."""
+        self.current_pos_px = list(new_pos_px)
+
+    def draw(self, surface):
+        """Draws the projectile on the given surface."""
+        center_x_int = int(self.current_pos_px[0])
+        center_y_int = int(self.current_pos_px[1])
+        # Basic bounds check before drawing
+        if 0 <= center_x_int <= cfg.WIDTH and 0 <= center_y_int <= cfg.HEIGHT:
+            pygame.draw.circle(surface, self.color, (center_x_int, center_y_int), self.radius)
+
+
+class Target:
+    """Represents the target box in the simulation."""
+    def __init__(self, initial_pos_px=None):
+        self.width = cfg.BOX_WIDTH_PX
+        self.height = cfg.BOX_HEIGHT_PX
+        self.color = cfg.RED
+        # Use provided initial position or default from config
+        if initial_pos_px is None:
+            self.pos_px = list(cfg.INITIAL_BOX_POS_PX)
+        else:
+            self.pos_px = list(initial_pos_px)
+        # Rect object for drawing and collision detection (optional)
+        self.rect = pygame.Rect(self.pos_px[0], self.pos_px[1], self.width, self.height)
+
+    def set_position(self, pos_px):
+        """Sets the target's top-left position."""
+        self.pos_px = list(pos_px)
+        self.rect.topleft = self.pos_px
+
+    @property
+    def center_pos_px(self):
+        """Returns the center position of the target."""
+        return [self.pos_px[0] + self.width / 2, self.pos_px[1] + self.height / 2]
+
+    def draw(self, surface):
+        """Draws the target box on the given surface."""
+        # Update rect position just in case it was changed directly (though set_position is preferred)
+        self.rect.topleft = (int(self.pos_px[0]), int(self.pos_px[1]))
+        pygame.draw.rect(surface, self.color, self.rect)
+
+================================================================================
+
+(main.py)
+# main.py
+import pygame
+import sys
+import math
+import pygame.font # Font kullanımı için eklendi
+# Import configurations
+import config as cfg
+# Import utility functions
+import utils
+# Import game object classes
+from game_objects import Projectile, Target
+# Import physics engine
+from physics import PhysicsEngine
+# Import UI manager
+from ui import UIManager
+
+# --- Game States ---
+SELECTION = 0
+SIMULATION = 1
+
+# --- Pygame Setup (Global) ---
+pygame.init()
+screen = pygame.display.set_mode((cfg.WIDTH, cfg.HEIGHT))
+pygame.display.set_caption("Atış Simülasyonu - Sahne Seçin") # Initial caption
+clock = pygame.time.Clock()
+# Define fonts needed globally or in functions
+try:
+    font_medium = pygame.font.Font(None, cfg.FONT_SIZE_MEDIUM)
+    font_small = pygame.font.Font(None, cfg.FONT_SIZE_SMALL)
+    font_large = pygame.font.Font(None, cfg.FONT_SIZE_LARGE) # For selection title
+except Exception as e:
+    print(f"Error loading fonts: {e}")
+    pygame.quit()
+    sys.exit()
+
+
+# --- Global Simulation Variables (Initialized when scene is selected) ---
+active_scene_name = None
+active_scene_config = None
+projectile = None
+target = None
+physics_engine = None
+ui_manager = None
+
+# Game state variables (initialized/reset in reset_simulation)
+launch_v0x_px_s = 0.0
+launch_v0y_px_s = 0.0
+current_vx_px_s = 0.0
+current_vy_px_s = 0.0
+simulation_running = False
+simulation_paused = False
+simulation_start_time_sec = 0.0
+time_paused_offset_sec = 0.0
+simulation_speed_multiplier = 1.0
+time_to_target_sec = 2.0 # Default, will be overwritten
+launch_v0x_mps_display = 0.0
+launch_v0y_mps_display = 0.0
+current_t_elapsed_sec = 0.0
+pause_start_time_sec = 0.0 # Track when pause began
+
+# --- Helper Functions ---
+
+def draw_button(surface, text, rect, button_color, text_color, font, border_radius=cfg.BUTTON_BORDER_RADIUS):
+    """Draws a button with text."""
+    pygame.draw.rect(surface, button_color, rect, border_radius=border_radius)
+    text_surf = font.render(text, True, text_color)
+    text_rect = text_surf.get_rect(center=rect.center)
+    surface.blit(text_surf, text_rect)
+
+def draw_selection_screen(surface):
+    """Draws the scene selection screen and returns button rects."""
+    surface.fill(cfg.BLACK) # Background
+    button_rects = {}
+    button_width = cfg.BUTTON_WIDTH * 1.5 # Make buttons wider for scene names
+    button_height = cfg.BUTTON_HEIGHT * 1.2
+    start_y = cfg.HEIGHT // 2 - (len(cfg.SCENES) * (button_height + cfg.SPACING_PX)) // 2
+    button_x = (cfg.WIDTH - button_width) // 2
+
+    # Draw Title
+    title_surf = font_large.render("Sahne Seçin", True, cfg.WHITE)
+    title_rect = title_surf.get_rect(center=(cfg.WIDTH // 2, start_y - button_height))
+    surface.blit(title_surf, title_rect)
+
+    # Draw Buttons
+    current_y = start_y
+    for scene_name in cfg.SCENES.keys():
+        rect = pygame.Rect(button_x, current_y, button_width, button_height)
+        draw_button(surface, scene_name, rect, cfg.BLUE, cfg.WHITE, font_medium)
+        button_rects[scene_name] = rect
+        current_y += button_height + cfg.SPACING_PX
+
+    pygame.display.flip()
+    return button_rects
+
+def initialize_simulation(scene_name):
+    """Initializes all components for the selected simulation scene."""
+    global active_scene_name, active_scene_config, projectile, target
+    global physics_engine, ui_manager, time_to_target_sec
+
+    active_scene_name = scene_name
+    try:
+        active_scene_config = cfg.SCENES[active_scene_name]
+    except KeyError:
+        print(f"Error: Scene '{scene_name}' not found in config.py. Returning to selection.")
+        return False # Indicate failure
+
+    # --- Initialize Simulation Components ---
+    pygame.display.set_caption(active_scene_config.get("title", "Atış Simülasyonu"))
+    projectile = Projectile(initial_pos_px=list(active_scene_config["initial_projectile_pos"])) # Use list copy
+    target = Target(initial_pos_px=list(active_scene_config["initial_target_pos"])) # Use list copy
+    physics_engine = PhysicsEngine()
+    ui_manager = UIManager(screen, active_scene_config) # Pass scene config to UI
+
+    # --- Specific Initialization for Dikey Atış ---
+    if active_scene_name == "Dikey Atış":
+        # Set target's position to match the projectile's initial position
+        target.set_position(list(projectile.initial_pos_px)) # Use list copy
+        # Adjust target position visually to its center (as it's not drawn)
+        target.set_position([projectile.initial_pos_px[0] - target.width / 2,
+                             projectile.initial_pos_px[1] - target.height / 2])
+
+
+    ui_manager.initialize_sliders(projectile, target) # Initialize sliders based on scene config
+
+    # --- Reset State Variables ---
+    # Set default time from config BEFORE resetting, so reset uses the correct value
+    time_to_target_sec = float(active_scene_config.get("default_time_str", "2.0"))
+    reset_simulation() # Reset all simulation variables and UI state
+
+    return True # Indicate success
+
+# --- Simulation Helper Functions (Need access to global simulation variables) ---
+
+def update_positions_from_sliders():
+    """Updates initial projectile and target positions based on active sliders."""
+    # Ensure components are initialized
+    if not ui_manager or not projectile or not target or not active_scene_config:
+        return
+
+    sliders = ui_manager.sliders
+    sliders_enabled = active_scene_config.get("sliders_enabled", []) # Get enabled sliders for scene
+
+    drawable_height = cfg.DRAWABLE_HEIGHT
+    y_offset = cfg.DRAWABLE_Y_OFFSET
+
+    # Calculate current positions BEFORE calculating ranges
+    current_proj_x = projectile.initial_pos_px[0]
+    current_proj_y = projectile.initial_pos_px[1]
+    current_target_x = target.pos_px[0]
+    current_target_y = target.pos_px[1]
+
+    # Calculate Ranges
+    circle_range_x = cfg.WIDTH - 2 * projectile.radius
+    circle_range_y = drawable_height - 2 * projectile.radius
+    box_range_x = cfg.WIDTH - target.width
+    box_range_y = drawable_height - target.height
+
+    # Update Positions based on ENABLED sliders
+    new_proj_x = current_proj_x
+    new_proj_y = current_proj_y
+    new_target_x = current_target_x
+    new_target_y = current_target_y
+
+    if "circle_x" in sliders_enabled and "circle_x" in sliders:
+        new_proj_x = projectile.radius + sliders.get("circle_x", 0.5) * circle_range_x
+    if "circle_y" in sliders_enabled and "circle_y" in sliders:
+        new_proj_y = y_offset + projectile.radius + sliders.get("circle_y", 0.5) * circle_range_y
+    if "box_x" in sliders_enabled and "box_x" in sliders:
+        new_target_x = sliders.get("box_x", 0.5) * box_range_x
+    if "box_y" in sliders_enabled and "box_y" in sliders:
+        new_target_y = y_offset + sliders.get("box_y", 0.5) * box_range_y # Box Y maps like circle Y
+
+    # Apply updates
+    projectile.set_initial_position([new_proj_x, new_proj_y])
+
+    # --- Special handling for Dikey Atış target position ---
+    if active_scene_name == "Dikey Atış":
+        # Target always mirrors projectile's initial position (centered)
+        target.set_position([new_proj_x - target.width / 2, new_proj_y - target.height / 2])
+    else:
+        target.set_position([new_target_x, new_target_y])
+
+
+    # If sim not running, ensure current projectile pos is reset
+    if not simulation_running:
+        projectile.reset_to_initial()
+
+def reset_simulation():
+    """Resets the simulation state and UI elements for the current scene."""
+    global simulation_running, launch_v0x_px_s, launch_v0y_px_s, current_vx_px_s, current_vy_px_s
+    global launch_v0x_mps_display, launch_v0y_mps_display, current_t_elapsed_sec
+    global simulation_paused, time_paused_offset_sec, time_to_target_sec # time_to_target_sec is now reset here too
+
+    # Ensure components are initialized
+    if not ui_manager or not projectile or not target or not active_scene_config:
+        print("Warning: reset_simulation called before initialization.")
+        return
+
+    # Reset simulation state
+    simulation_running = False
+    simulation_paused = False
+    time_paused_offset_sec = 0.0
+    launch_v0x_px_s = 0.0
+    launch_v0y_px_s = 0.0
+    current_vx_px_s = 0.0
+    current_vy_px_s = 0.0
+    launch_v0x_mps_display = 0.0
+    launch_v0y_mps_display = 0.0
+    current_t_elapsed_sec = 0.0
+
+    # Reset UI input/state using the active scene's default time
+    default_time_str = active_scene_config.get("default_time_str", "2.0")
+    ui_manager.time_to_target_str = default_time_str
+    ui_manager.input_error = False
+    ui_manager.error_message = None # Clear error message on reset
+    try:
+        time_to_target_sec = float(default_time_str) # Reset validated time
+    except ValueError:
+        time_to_target_sec = 2.0 # Fallback default
+        ui_manager.time_to_target_str = "2.0"
+
+
+    # Reset vector display toggles in UI Manager to defaults
+    ui_manager.show_vectors = True
+    ui_manager.show_velocity_vector = False
+    ui_manager.show_acceleration_vector = False
+
+    # Reset object positions based on sliders (or initial scene config if sliders absent)
+    # Need to re-initialize sliders if they weren't before calling reset
+    ui_manager.initialize_sliders(projectile, target)
+    update_positions_from_sliders() # This will set initial positions based on sliders/defaults
+    projectile.reset_to_initial() # Ensure projectile is at its *initial* pos
+
+# --- Main Loop ---
+running = True
+game_state = SELECTION # Start in selection mode
+selection_buttons = {} # To store button rects
+
+while running:
+    current_time_sec_abs = pygame.time.get_ticks() / 1000.0
+
+    # --- State Machine ---
+    if game_state == SELECTION:
+        # --- Selection Screen Logic ---
+        if not selection_buttons: # Draw only once unless needed again
+             selection_buttons = draw_selection_screen(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False; break
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1: # Left click
+                    mouse_pos = event.pos
+                    for scene_name, rect in selection_buttons.items():
+                        if rect.collidepoint(mouse_pos):
+                            print(f"Selected scene: {scene_name}")
+                            if initialize_simulation(scene_name):
+                                game_state = SIMULATION
+                                selection_buttons = {} # Clear buttons for next time
+                            else:
+                                # Handle initialization error (e.g., stay in selection)
+                                print("Failed to initialize simulation. Staying in selection.")
+                                selection_buttons = {} # Redraw selection screen
+                            break # Stop checking buttons once one is clicked
+        if not running: break
+
+    elif game_state == SIMULATION:
+        # --- Simulation Logic ---
+
+        # Ensure components are loaded (safety check)
+        if not ui_manager or not projectile or not target or not physics_engine or not active_scene_config:
+             print("Error: Simulation components not initialized. Returning to selection.")
+             game_state = SELECTION
+             selection_buttons = {}
+             pygame.display.set_caption("Atış Simülasyonu - Sahne Seçin")
+             continue # Skip rest of the loop iteration
+
+        # --- Event Handling (Simulation) ---
+        action_from_ui = None
+        back_to_menu_requested = False # Flag for returning to menu
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False; break
+
+            # Check for ESC key press to go back
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    back_to_menu_requested = True
+                    break # Exit event loop immediately
+
+            # Let UI Manager handle its events (buttons, sliders, input)
+            action_from_ui = ui_manager.handle_event(event, simulation_running, simulation_paused)
+
+            # Check if the UI manager itself triggered the back action
+            if action_from_ui == "back_to_menu":
+                back_to_menu_requested = True
+                break # Exit event loop immediately
+
+            # If UI handled an event, we might not need to process further in this loop
+            # (Depends on the specific action)
+            if action_from_ui and action_from_ui != "update_slider": # Allow slider updates to fall through
+                 break
+
+        if not running: break
+
+        # Handle request to return to menu (from ESC or Back button)
+        if back_to_menu_requested:
+            game_state = SELECTION
+            selection_buttons = {} # Force redraw of selection screen
+            pygame.display.set_caption("Atış Simülasyonu - Sahne Seçin")
+            # Reset simulation variables to None to release resources (optional but good practice)
+            projectile = None
+            target = None
+            physics_engine = None
+            ui_manager = None
+            active_scene_name = None
+            active_scene_config = None
+            continue # Skip the rest of the simulation logic for this frame
+
+        # --- Process Actions from UI (Simulation) ---
+        if action_from_ui == "launch":
+            ui_manager.error_message = None # Clear previous errors
+
+            # --- Vertical Launch ("Dikey Atış") Specific Logic ---
+            if active_scene_name == "Dikey Atış":
+                valid_time = ui_manager.validate_time_input()
+                if valid_time is not None:
+                    time_to_target_sec = valid_time # This is total round-trip time
+                    simulation_running = False # Ensure reset
+                    simulation_paused = False
+                    time_paused_offset_sec = 0.0
+                    current_t_elapsed_sec = 0.0
+                    update_positions_from_sliders() # Ensure start pos is current
+                    projectile.reset_to_initial()
+                    ui_manager.show_vectors = True
+                    ui_manager.show_velocity_vector = False
+                    ui_manager.show_acceleration_vector = False
+
+                    # Calculate V0y needed to return in time_to_target_sec
+                    # Time to reach peak is t_peak = time_to_target_sec / 2
+                    t_peak = time_to_target_sec / 2.0
+                    gravity_px_s2 = physics_engine.gravity_px_s2
+
+                    # Physics: V_peak = V0y_phys - g * t_peak. V_peak = 0
+                    # So, V0y_phys = g * t_peak
+                    v0y_physics_px_s = gravity_px_s2 * t_peak
+
+                    # Convert to Pygame coordinates (down is positive Y)
+                    launch_v0y_px_s = -v0y_physics_px_s
+                    launch_v0x_px_s = 0.0 # No horizontal velocity
+
+                    launch_v0x_mps_display = 0.0
+                    launch_v0y_mps_display = utils.px_s_to_mps(-launch_v0y_px_s) # Y is inverted for display
+
+                    simulation_running = True
+                    simulation_start_time_sec = current_time_sec_abs
+                    current_vx_px_s = launch_v0x_px_s
+                    current_vy_px_s = launch_v0y_px_s
+                # else: # Invalid time, UI Manager handles the error display
+
+            # --- Horizontal Launch ("Yatay Atış") Specific Logic ---
+            elif active_scene_name == "Yatay Atış":
+                update_positions_from_sliders()
+                initial_y_proj = projectile.initial_pos_px[1]
+                # For Yatay Atış, target Y matters for calculation
+                target_y_for_calc = target.pos_px[1] + target.height # Use bottom of target
+
+                if initial_y_proj >= target_y_for_calc: # Projectile must start above target bottom
+                    ui_manager.input_error = True
+                    ui_manager.error_message = "Yatay atış mümkün değil! (Hedef başlangıcın altında olmalı)"
+                    time_to_target_sec = 0 # Indicate error state
+                else:
+                    ui_manager.input_error = False
+                    # delta_y is positive downwards in physics
+                    delta_y_physics_px = target_y_for_calc - initial_y_proj
+                    gravity_px_s2 = physics_engine.gravity_px_s2
+
+                    if gravity_px_s2 > 0 and delta_y_physics_px > 0:
+                        # delta_y = 0.5 * g * t^2  => t = sqrt(2 * delta_y / g)
+                        time_to_target_sec = math.sqrt(2 * delta_y_physics_px / gravity_px_s2)
+                    else:
+                        time_to_target_sec = 0
+
+                    ui_manager.time_to_target_str = f"{time_to_target_sec:.2f}" # Update UI time input
+
+                    delta_x_px = target.center_pos_px[0] - projectile.initial_pos_px[0]
+                    if time_to_target_sec > 0:
+                        launch_v0x_px_s = delta_x_px / time_to_target_sec
+                    else:
+                        launch_v0x_px_s = 0
+
+                    launch_v0y_px_s = 0.0 # Horizontal launch means V0y=0
+                    launch_v0x_mps_display = utils.px_s_to_mps(launch_v0x_px_s)
+                    launch_v0y_mps_display = 0.0
+
+                    if time_to_target_sec > 0:
+                        simulation_running = False # Ensure reset
+                        simulation_paused = False
+                        time_paused_offset_sec = 0.0
+                        current_t_elapsed_sec = 0.0
+                        projectile.reset_to_initial()
+                        ui_manager.show_vectors = True # Reset vector views
+                        ui_manager.show_velocity_vector = False
+                        ui_manager.show_acceleration_vector = False
+                        simulation_running = True
+                        simulation_start_time_sec = current_time_sec_abs
+                        current_vx_px_s = launch_v0x_px_s
+                        current_vy_px_s = launch_v0y_px_s
+                    else:
+                        # Snap to target if time is invalid/zero
+                        projectile.current_pos_px = list(target.center_pos_px) # Snap proj to target center
+                        simulation_running = False
+                        simulation_paused = False
+                        current_t_elapsed_sec = 0.0
+                        current_vx_px_s = launch_v0x_px_s
+                        current_vy_px_s = launch_v0y_px_s
+
+            # --- Default Launch Logic (Other Scenes like Eğik Atış) ---
+            else:
+                valid_time = ui_manager.validate_time_input()
+                if valid_time is not None:
+                    time_to_target_sec = valid_time
+                    simulation_running = False # Ensure reset
+                    simulation_paused = False
+                    time_paused_offset_sec = 0.0
+                    current_t_elapsed_sec = 0.0
+                    update_positions_from_sliders()
+                    projectile.reset_to_initial()
+                    ui_manager.show_vectors = True # Reset vector views
+                    ui_manager.show_velocity_vector = False
+                    ui_manager.show_acceleration_vector = False
+
+                    launch_v0x_px_s, launch_v0y_px_s = physics_engine.calculate_required_velocities(
+                        projectile.initial_pos_px, target.center_pos_px, time_to_target_sec
+                    )
+                    launch_v0x_mps_display = utils.px_s_to_mps(launch_v0x_px_s)
+                    launch_v0y_mps_display = utils.px_s_to_mps(-launch_v0y_px_s) # Y is inverted for display
+
+                    simulation_running = True
+                    simulation_start_time_sec = current_time_sec_abs
+                    current_vx_px_s = launch_v0x_px_s
+                    current_vy_px_s = launch_v0y_px_s
+                # else: # Invalid time, UI Manager handles the error display
+
+        elif action_from_ui == "reset":
+            reset_simulation() # Resets state and positions for the *current* scene
+        elif action_from_ui == "pause_toggle":
+            simulation_paused = not simulation_paused
+            if simulation_paused:
+                 # Record the wall-clock time when pause starts
+                 pause_start_time_sec = current_time_sec_abs
+            else: # Resuming
+                # Calculate how long we were paused
+                time_paused_duration = current_time_sec_abs - pause_start_time_sec
+                # Add this duration to the offset, so it's skipped in future elapsed time calcs
+                time_paused_offset_sec += time_paused_duration
+        elif action_from_ui == "speed_down":
+            simulation_speed_multiplier = max(0.1, round(simulation_speed_multiplier - 0.1, 1))
+        elif action_from_ui == "speed_up":
+            simulation_speed_multiplier = min(5.0, round(simulation_speed_multiplier + 0.1, 1))
+        elif action_from_ui == "update_slider":
+             # Only update positions if simulation isn't running
+             if not simulation_running:
+                 update_positions_from_sliders()
+        elif action_from_ui == "validate_time":
+            # Only validate if not in horizontal mode (where time is calculated)
+            # AND not in vertical mode (where time is also input, but validated on launch)
+            if active_scene_name != "Yatay Atış" and active_scene_name != "Dikey Atış":
+                valid_time = ui_manager.validate_time_input()
+                if valid_time is not None: time_to_target_sec = valid_time
+
+        # --- Simulation Update (Physics Calculation) ---
+        # Calculate current velocity for vector display, even if paused/stopped
+        current_effective_time_for_velocity = 0.0
+        if simulation_running or current_t_elapsed_sec > 0: # If sim ever ran or finished
+            # Calculate the *unmultiplied* time elapsed so far (or at pause)
+            if simulation_paused:
+                # Time is frozen at the moment pause started
+                # current_t_elapsed_sec holds this value from the frame before pause
+                effective_t_for_physics = current_t_elapsed_sec * simulation_speed_multiplier
+            elif not simulation_running and current_t_elapsed_sec > 0 :
+                # If finished, use the final effective time (target time equivalent)
+                effective_t_for_physics = time_to_target_sec / simulation_speed_multiplier if simulation_speed_multiplier > 0 else 0
+                effective_t_for_physics = min(effective_t_for_physics, current_t_elapsed_sec) * simulation_speed_multiplier # Use actual elapsed if shorter
+            else: # Running and not paused
+                 # Calculate actual time passed since start, minus paused time
+                 t_elapsed_actual = (current_time_sec_abs - simulation_start_time_sec) - time_paused_offset_sec
+                 # Scale by speed multiplier for physics calcs
+                 effective_t_for_physics = t_elapsed_actual * simulation_speed_multiplier
+                 # Store the unmultiplied time for display/pause
+                 current_t_elapsed_sec = t_elapsed_actual
+
+            # Calculate current instantaneous velocity based on effective time
+            _, current_v_px_s = physics_engine.calculate_kinematic_update(
+                 projectile.initial_pos_px, launch_v0x_px_s, launch_v0y_px_s, effective_t_for_physics)
+            current_vx_px_s, current_vy_px_s = current_v_px_s
+        else: # Before first launch or after reset
+             current_vx_px_s, current_vy_px_s = 0.0, 0.0
+
+
+        # --- Update Projectile Position ---
+        # Update position only if running and not paused
+        if simulation_running and not simulation_paused:
+            # We already calculated t_elapsed_actual and effective_t_for_physics above
+            # Re-use effective_t_for_physics here
+            t_elapsed_effective = current_t_elapsed_sec * simulation_speed_multiplier # Get the current effective time
+
+            # Check if target time reached
+            if time_to_target_sec > 0 and t_elapsed_effective >= time_to_target_sec:
+                # Target Time Reached - use exact target time for final calculation
+                t_final_effective = time_to_target_sec
+                 # Cap unmultiplied time at the equivalent target time
+                current_t_elapsed_sec = time_to_target_sec / simulation_speed_multiplier if simulation_speed_multiplier > 0 else 0
+
+                # Calculate final state (velocity already calculated above for t_final_effective)
+                if active_scene_name == "Dikey Atış":
+                    # Snap back to the initial position for vertical throw
+                    new_projectile_pos = list(projectile.initial_pos_px)
+                else:
+                    # Snap to target center for other throws
+                    new_projectile_pos = target.center_pos_px
+
+                projectile.update_position(list(new_projectile_pos)) # Update position
+                simulation_running = False # Stop the simulation state
+            else:
+                # Simulation In Progress - use current effective time
+                new_projectile_pos, _ = physics_engine.calculate_kinematic_update(
+                    projectile.initial_pos_px, launch_v0x_px_s, launch_v0y_px_s, t_elapsed_effective)
+                # Velocity is already calculated above for display, so just update position
+                projectile.update_position(new_projectile_pos)
+
+        # --- Prepare Game State for UI ---
+        # Cap displayed elapsed time at the target time equivalent
+        display_t_elapsed = 0.0
+        if simulation_speed_multiplier > 0:
+             display_t_elapsed = min(current_t_elapsed_sec, time_to_target_sec / simulation_speed_multiplier)
+        elif current_t_elapsed_sec > 0: # If speed is 0 but sim ran, show final time
+             display_t_elapsed = current_t_elapsed_sec
+
+        game_state_for_ui = {
+            'projectile': projectile, 'target': target,
+            'simulation_running': simulation_running, 'simulation_paused': simulation_paused,
+            'simulation_speed_multiplier': simulation_speed_multiplier,
+            'time_to_target_sec': time_to_target_sec,
+            'current_t_elapsed_sec': display_t_elapsed,
+            'launch_v0x_px_s': launch_v0x_px_s, 'launch_v0y_px_s': launch_v0y_px_s,
+            'launch_v0x_mps_display': launch_v0x_mps_display, 'launch_v0y_mps_display': launch_v0y_mps_display,
+            'current_vx_px_s': current_vx_px_s, 'current_vy_px_s': current_vy_px_s,
+            'scene_title': active_scene_config.get("title", ""), # Pass scene title
+            'active_scene_name': active_scene_name # Pass scene name for conditional drawing
+        }
+
+        # --- Drawing (Simulation) ---
+        ui_manager.draw_all(game_state_for_ui) # Draw UI elements (including background, buttons, text)
+
+        # Draw target only if it's NOT the "Dikey Atış" scene
+        if active_scene_name != "Dikey Atış":
+            target.draw(screen)                   # Draw target
+
+        projectile.draw(screen)               # Draw projectile (on top)
+
+        pygame.display.flip()
+
+    # --- Common ---
+    clock.tick(60)
+
+# --- Cleanup ---
+pygame.quit()
+sys.exit()
+
+================================================================================
+
+(physics.py)
+# physics.py
+import config as cfg
+import math
+
+class PhysicsEngine:
+    """Handles projectile motion calculations."""
+
+    def __init__(self):
+        self.gravity_px_s2 = cfg.GRAVITY_PX_PER_SEC2
+
+    def calculate_required_velocities(self, initial_pos_px, target_center_px, time_to_target_sec):
+        """
+        Calculates the initial velocities (px/s) required for the projectile
+        to reach the target center in the given time.
+
+        Args:
+            initial_pos_px (list): Projectile's starting [x, y] in pixels.
+            target_center_px (list): Target's center [x, y] in pixels.
+            time_to_target_sec (float): The desired time to reach the target.
+
+        Returns:
+            tuple: (v0x_px_s, v0y_px_s) required initial velocities in pixels/sec.
+                   Returns (0, 0) if time_to_target_sec is zero or negative.
+        """
+        if time_to_target_sec <= 0:
+            return 0.0, 0.0
+
+        delta_x_px = target_center_px[0] - initial_pos_px[0]
+        # Delta Y in physics coordinates (relative vertical distance, positive if target is higher physics-wise)
+        delta_y_physics_px = initial_pos_px[1] - target_center_px[1] # Correct calculation
+
+        # x = v0x * t  => v0x = x / t
+        v0x_px_s = delta_x_px / time_to_target_sec
+
+        # Physics: DeltaY = v0y_physics * t - 0.5 * g * t^2
+        # v0y_physics = (DeltaY + 0.5 * g * t^2) / t
+        # Note: Use gravity_px_s2 (positive value) here. The sign comes from the equation structure.
+        try:
+            v0y_physics_px_s = (delta_y_physics_px + 0.5 * self.gravity_px_s2 * time_to_target_sec**2) / time_to_target_sec
+        except ZeroDivisionError:
+             # This case is already handled by the initial check for time_to_target_sec <= 0
+             # But adding it defensively.
+             return 0.0, 0.0
+
+        # Convert v0y from physics (up positive) to pygame (down positive)
+        v0y_px_s = -v0y_physics_px_s
+
+        return v0x_px_s, v0y_px_s
+
+    def calculate_kinematic_update(self, initial_pos_px, v0x_px_s, v0y_px_s, t_elapsed_effective):
+        """
+        Calculates the projectile's position and velocity at a given effective time.
+
+        Args:
+            initial_pos_px (list): Projectile's starting [x, y] in pixels.
+            v0x_px_s (float): Initial horizontal velocity in pixels/sec.
+            v0y_px_s (float): Initial vertical velocity in pixels/sec (Pygame coords).
+            t_elapsed_effective (float): The effective elapsed simulation time in seconds.
+
+        Returns:
+            tuple: (new_pos_px, current_v_px_s) where
+                   new_pos_px is the calculated [x, y] position,
+                   current_v_px_s is the current [vx, vy] velocity in pixels/sec.
+        """
+        # Calculate new position
+        pos_x = initial_pos_px[0] + v0x_px_s * t_elapsed_effective
+        # v0y_px_s is negative for upward launch in Pygame coords. Gravity (gravity_px_s2) is positive (down).
+        pos_y = initial_pos_px[1] + v0y_px_s * t_elapsed_effective + 0.5 * self.gravity_px_s2 * t_elapsed_effective**2
+
+        # Calculate current velocity
+        vx = v0x_px_s
+        vy = v0y_px_s + self.gravity_px_s2 * t_elapsed_effective
+
+        return [pos_x, pos_y], [vx, vy]
+
+================================================================================
+
+(ui.py)
+# ui.py
+import pygame
+import config as cfg
+import utils # For drawing text, arrows, conversions
+import math
+
+class UIManager:
+    """Manages UI elements, state, drawing, and interactions."""
+
+    def __init__(self, screen, scene_config):
+        self.screen = screen
+        self.scene_config = scene_config
+        self.scene_title = self.scene_config.get("title", "Atış Simülasyonu")
+        # Get explicitly enabled sliders for this scene
+        self.sliders_enabled = self.scene_config.get("sliders_enabled", []) # Use empty list if none specified
+
+        # Load fonts
+        self.font_large = pygame.font.Font(None, cfg.FONT_SIZE_LARGE)
+        self.font_medium = pygame.font.Font(None, cfg.FONT_SIZE_MEDIUM)
+        self.font_small = pygame.font.Font(None, cfg.FONT_SIZE_SMALL)
+        self.font_formula = pygame.font.Font(None, cfg.FONT_SIZE_FORMULA)
+        self.font_title = pygame.font.Font(None, cfg.FONT_SIZE_SMALL) # Font for title
+        self.font_back_button = pygame.font.Font(None, cfg.FONT_SIZE_SMALL) # Font for back button
+
+        # --- UI State ---
+        self.sliders = {}
+        self.dragging_slider = None
+        self.input_active = False
+        self.input_error = False
+        self.error_message = None # Added for specific error messages
+        self.time_to_target_str = self.scene_config.get("default_time_str", "2.0")
+        # Vector display toggles (managed by UI)
+        self.show_vectors = True
+        self.show_velocity_vector = False
+        self.show_acceleration_vector = False
+
+        # --- UI Element Rects ---
+        # Define ALL potential slider rects first, even if not enabled for this scene
+        self._define_all_slider_rects()
+        # Define other control rects
+        self._define_control_rects()
+        # Define back button relative to sliders (use circle_y if possible)
+        # PASS self.sliders_enabled so it knows which sliders are active
+        self._define_back_button_rect(self.sliders_enabled)
+
+
+    def _define_all_slider_rects(self):
+        """Defines the rectangles for ALL potential sliders."""
+        self.slider_rects_track = {
+            "circle_x": pygame.Rect(cfg.SLIDER_X_OFFSET, cfg.SLIDER_AREA_Y_START, cfg.SLIDER_TRACK_WIDTH, cfg.SLIDER_TRACK_HEIGHT),
+            "circle_y": pygame.Rect(cfg.SLIDER_X_OFFSET, cfg.SLIDER_AREA_Y_START + cfg.SLIDER_Y_SPACING, cfg.SLIDER_TRACK_WIDTH, cfg.SLIDER_TRACK_HEIGHT),
+            "box_x": pygame.Rect(cfg.WIDTH - cfg.SLIDER_TRACK_WIDTH - cfg.SLIDER_X_OFFSET, cfg.SLIDER_AREA_Y_START, cfg.SLIDER_TRACK_WIDTH, cfg.SLIDER_TRACK_HEIGHT),
+            "box_y": pygame.Rect(cfg.WIDTH - cfg.SLIDER_TRACK_WIDTH - cfg.SLIDER_X_OFFSET, cfg.SLIDER_AREA_Y_START + cfg.SLIDER_Y_SPACING, cfg.SLIDER_TRACK_WIDTH, cfg.SLIDER_TRACK_HEIGHT),
+        }
+
+    def _define_control_rects(self):
+        """Defines rectangles for buttons, input box etc."""
+        # Bottom Controls (Centered)
+        self.input_box_rect = pygame.Rect(cfg.CONTROLS_START_X, cfg.CONTROL_AREA_Y_START + cfg.INPUT_BOX_Y_OFFSET, cfg.TEXT_BOX_WIDTH, cfg.TEXT_BOX_HEIGHT)
+        self.launch_button_rect = pygame.Rect(self.input_box_rect.right + cfg.SPACING_PX, cfg.CONTROL_AREA_Y_START, cfg.BUTTON_WIDTH, cfg.BUTTON_HEIGHT)
+        self.restart_button_rect = pygame.Rect(self.launch_button_rect.right + cfg.SPACING_PX, cfg.CONTROL_AREA_Y_START, cfg.BUTTON_WIDTH, cfg.BUTTON_HEIGHT)
+        self.toggle_vec_vis_button_rect = pygame.Rect(self.restart_button_rect.right + cfg.SPACING_PX, cfg.CONTROL_AREA_Y_START, cfg.TOGGLE_VEC_VIS_BUTTON_WIDTH, cfg.BUTTON_HEIGHT)
+        self.toggle_vec_mode_button_rect = pygame.Rect(self.toggle_vec_vis_button_rect.right + cfg.SPACING_PX, cfg.CONTROL_AREA_Y_START, cfg.TOGGLE_VEC_MODE_BUTTON_WIDTH, cfg.BUTTON_HEIGHT)
+        self.toggle_vec_type_button_rect = pygame.Rect(self.toggle_vec_mode_button_rect.right + cfg.SPACING_PX, cfg.CONTROL_AREA_Y_START, cfg.TOGGLE_VEC_TYPE_BUTTON_WIDTH, cfg.BUTTON_HEIGHT)
+        # Formula Area Controls
+        self.speed_minus_button_rect = pygame.Rect(cfg.WIDTH // 2 - cfg.SPEED_MINUS_X_OFFSET, cfg.FORMULA_CONTROLS_Y_OFFSET, cfg.SMALL_BUTTON_WIDTH, cfg.SMALL_BUTTON_HEIGHT)
+        self.speed_plus_button_rect = pygame.Rect(cfg.WIDTH // 2 + cfg.SPEED_PLUS_X_OFFSET, cfg.FORMULA_CONTROLS_Y_OFFSET, cfg.SMALL_BUTTON_WIDTH, cfg.SMALL_BUTTON_HEIGHT)
+        self.pause_button_rect = pygame.Rect(self.speed_minus_button_rect.left - cfg.PAUSE_BUTTON_WIDTH - cfg.SPACING_PX, cfg.FORMULA_CONTROLS_Y_OFFSET, cfg.PAUSE_BUTTON_WIDTH, cfg.BUTTON_HEIGHT)
+
+
+    def _define_back_button_rect(self, enabled_sliders): # Pass enabled sliders
+        """Defines the back button rect relative to the circle_y slider track if it is enabled."""
+        # Default position if circle_y slider is not enabled or doesn't exist
+        default_x = cfg.PADDING_PX
+        default_y = cfg.SLIDER_AREA_Y_START + cfg.SLIDER_Y_SPACING + cfg.SLIDER_TRACK_HEIGHT + cfg.BACK_BUTTON_Y_OFFSET_AFTER_SLIDER # Place below where second slider would be
+
+        back_button_x = default_x
+        back_button_y = default_y
+
+        # Check if 'circle_y' slider is enabled for the current scene
+        if "circle_y" in enabled_sliders:
+            circle_y_track = self.slider_rects_track.get("circle_y")
+            if circle_y_track:
+                # Position below the circle_y slider's track using the offset from config
+                back_button_x = circle_y_track.left # Align with the left of the slider track
+                back_button_y = circle_y_track.bottom + cfg.BACK_BUTTON_Y_OFFSET_AFTER_SLIDER
+            # else: Use default if rect somehow not found (shouldn't happen)
+        # else: Use default position because circle_y is not enabled
+
+        self.back_button_rect = pygame.Rect(
+            back_button_x,
+            back_button_y,
+            cfg.BACK_BUTTON_WIDTH,
+            cfg.BACK_BUTTON_HEIGHT
+        )
+
+    def initialize_sliders(self, projectile, target):
+         """Calculates initial slider values based on object positions for ENABLED sliders."""
+         drawable_height = cfg.DRAWABLE_HEIGHT
+         y_offset = cfg.DRAWABLE_Y_OFFSET
+         if not projectile or not target: return
+         sliders_temp = {}
+         try:
+             # Calculate ranges needed for potentially enabled sliders
+             circle_range_x = cfg.WIDTH - 2 * projectile.radius
+             circle_range_y = drawable_height - 2 * projectile.radius
+             box_range_x = cfg.WIDTH - target.width
+             box_range_y = drawable_height - target.height
+
+             # Calculate values only for the sliders enabled in this scene
+             if "circle_x" in self.sliders_enabled:
+                 sliders_temp["circle_x"] = (projectile.initial_pos_px[0] - projectile.radius) / circle_range_x if circle_range_x > 0 else 0.5
+             if "circle_y" in self.sliders_enabled:
+                 sliders_temp["circle_y"] = (projectile.initial_pos_px[1] - y_offset - projectile.radius) / circle_range_y if circle_range_y > 0 else 0.5
+             if "box_x" in self.sliders_enabled:
+                 sliders_temp["box_x"] = target.pos_px[0] / box_range_x if box_range_x > 0 else 0.5
+             if "box_y" in self.sliders_enabled:
+                  # Use target's top-left for box_y slider mapping
+                 sliders_temp["box_y"] = (target.pos_px[1] - y_offset) / box_range_y if box_range_y > 0 else 0.5
+
+         except (AttributeError, IndexError, TypeError, ZeroDivisionError) as e:
+             print(f"Error calculating initial slider values: {e}")
+             # Provide default values for enabled sliders if calculation fails
+             for key in self.sliders_enabled:
+                 sliders_temp[key] = 0.5
+
+         # Store clamped values for enabled sliders
+         self.sliders = {k: max(0.0, min(1.0, sliders_temp.get(k, 0.5))) for k in self.sliders_enabled}
+
+
+    def get_slider_handle_rect(self, slider_key):
+        """Calculates the rectangle for a slider's handle."""
+        # Check if this slider is actually enabled for the current scene
+        if slider_key not in self.sliders_enabled:
+            return None # Do not calculate or draw if not enabled
+        # Check if track rect exists (safety)
+        if slider_key not in self.slider_rects_track:
+             return None
+
+        track_rect = self.slider_rects_track[slider_key]
+        slider_val = self.sliders.get(slider_key, 0.5) # Get current value (0-1)
+        slider_val = max(0.0, min(1.0, slider_val)) # Clamp value
+
+        # Calculate handle position based on value
+        # Use track_rect.width - cfg.SLIDER_HANDLE_WIDTH as the effective range for the handle's left edge
+        effective_track_width = track_rect.width - cfg.SLIDER_HANDLE_WIDTH
+        handle_x = track_rect.left + slider_val * effective_track_width
+        handle_y = track_rect.centery - cfg.SLIDER_HANDLE_HEIGHT // 2
+
+        # Clamp handle position (redundant due to calculation method, but safe)
+        handle_x = max(track_rect.left, min(handle_x, track_rect.right - cfg.SLIDER_HANDLE_WIDTH))
+
+        return pygame.Rect(handle_x, handle_y, cfg.SLIDER_HANDLE_WIDTH, cfg.SLIDER_HANDLE_HEIGHT)
+
+
+    def handle_event(self, event, simulation_running, simulation_paused):
+        """Processes a single Pygame event and updates UI state."""
+        action = None
+        mouse_pos = pygame.mouse.get_pos()
+
+        # Check Back Button First
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.back_button_rect.collidepoint(mouse_pos):
+                return "back_to_menu"
+
+        # Handle Slider Interactions (Only if sliders are enabled for the scene)
+        if self.sliders_enabled: # Optimization: Only check sliders if there are any enabled
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                self.dragging_slider = None
+                for key in self.sliders_enabled: # Only check enabled sliders
+                    track_rect = self.slider_rects_track.get(key)
+                    handle_rect = self.get_slider_handle_rect(key) # This now returns None if not enabled
+                    if track_rect and handle_rect: # Check if rects exist
+                        # Allow clicking on track or handle
+                        clickable_area = track_rect.inflate(0, cfg.SLIDER_HANDLE_HEIGHT) # Make track easier to click vertically
+                        if clickable_area.collidepoint(mouse_pos):
+                            self.dragging_slider = key
+                            # Update value immediately if track clicked
+                            # Adjust calculation for effective width
+                            effective_track_width = track_rect.width - cfg.SLIDER_HANDLE_WIDTH
+                            if effective_track_width > 0:
+                               raw_val = (mouse_pos[0] - track_rect.left - cfg.SLIDER_HANDLE_WIDTH / 2) / effective_track_width
+                            else:
+                               raw_val = 0.5 # Avoid division by zero if track too small
+                            self.sliders[key] = max(0.0, min(1.0, raw_val))
+                            action = "update_slider"
+                            break # Found slider, stop checking
+            elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                self.dragging_slider = None
+            elif event.type == pygame.MOUSEMOTION and self.dragging_slider is not None:
+                # Ensure the dragged slider is actually enabled for this scene
+                if self.dragging_slider in self.sliders_enabled:
+                    track_rect = self.slider_rects_track[self.dragging_slider]
+                    # Adjust calculation for effective width
+                    effective_track_width = track_rect.width - cfg.SLIDER_HANDLE_WIDTH
+                    if effective_track_width > 0:
+                        raw_val = (mouse_pos[0] - track_rect.left - cfg.SLIDER_HANDLE_WIDTH / 2) / effective_track_width
+                    else:
+                        raw_val = 0.5
+                    self.sliders[self.dragging_slider] = max(0.0, min(1.0, raw_val))
+                    action = "update_slider"
+                else: # Should not happen if logic is correct, but safety check
+                    self.dragging_slider = None
+
+        # Handle Button / Input Box Interactions (only if not dragging slider)
+        if self.dragging_slider is None:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                # Input Box Activation
+                self.input_active = self.input_box_rect.collidepoint(mouse_pos)
+                if self.input_active:
+                    self.input_error = False; self.error_message = None
+
+                # Button Clicks
+                if self.launch_button_rect.collidepoint(mouse_pos) and not simulation_running: action = "launch"
+                elif self.restart_button_rect.collidepoint(mouse_pos): action = "reset"
+                elif self.toggle_vec_vis_button_rect.collidepoint(mouse_pos): self.show_vectors = not self.show_vectors
+                elif self.toggle_vec_mode_button_rect.collidepoint(mouse_pos): self.show_velocity_vector = not self.show_velocity_vector
+                elif self.toggle_vec_type_button_rect.collidepoint(mouse_pos): self.show_acceleration_vector = not self.show_acceleration_vector
+                elif self.speed_minus_button_rect.collidepoint(mouse_pos): action = "speed_down"
+                elif self.speed_plus_button_rect.collidepoint(mouse_pos): action = "speed_up"
+                elif self.pause_button_rect.collidepoint(mouse_pos) and (simulation_running or simulation_paused): # Allow toggle even if finished but was running
+                    action = "pause_toggle"
+
+            # Keyboard Input for Active Input Box
+            elif event.type == pygame.KEYDOWN and self.input_active:
+                active_scene_name = self.scene_config.get("title", "") # Get scene name for context
+                if event.key == pygame.K_RETURN:
+                    self.input_active = False
+                    # Trigger action based on scene type after Enter
+                    if active_scene_name.startswith("Yatay Atış"):
+                        action = "launch" # Yatay calculates time, so Enter launches
+                    elif active_scene_name.startswith("Dikey Atış"):
+                         action = "launch" # Dikey uses input time, Enter launches
+                    else: # Default (Eğik Atış etc.)
+                        action = "validate_time" # Other scenes validate time first
+                elif event.key == pygame.K_BACKSPACE:
+                    self.time_to_target_str = self.time_to_target_str[:-1]
+                    self.input_error = False; self.error_message = None
+                elif event.unicode.isdigit() or (event.unicode == '.' and '.' not in self.time_to_target_str):
+                     self.time_to_target_str += event.unicode
+                     self.input_error = False; self.error_message = None
+
+        return action
+
+
+    def validate_time_input(self):
+        """Validates the content of time_to_target_str. Returns valid float or None."""
+        try:
+            time_input = float(self.time_to_target_str)
+            if time_input > 0:
+                self.input_error = False; self.error_message = None
+                return time_input
+            else:
+                self.input_error = True; self.error_message = "Süre > 0 olmalı"
+                return None
+        except ValueError:
+            self.input_error = True; self.error_message = "Geçersiz süre formatı"
+            return None
+
+    def draw_all(self, game_state):
+        """Draws all UI elements based on the provided game state."""
+        self.screen.fill(cfg.BLUE)
+        self.draw_scene_title(game_state.get('scene_title', '')) # Draw scene title first
+        self.draw_formulas(game_state)
+        self.draw_formula_controls(game_state['simulation_paused'], game_state['simulation_speed_multiplier'])
+        self.draw_separator()
+        # Draw sliders only if they are enabled for the scene
+        if self.sliders_enabled:
+            self.draw_sliders(game_state['projectile'], game_state['target'])
+        self.draw_back_button() # Draw back button (positioning is now independent)
+        self.draw_bottom_controls(game_state.get('active_scene_name')) # Pass scene name for context
+        self.draw_time(game_state['current_t_elapsed_sec'])
+        # Draw vectors only if enabled AND simulation has started or finished (velocities exist)
+        if self.show_vectors and (game_state['simulation_running'] or game_state['current_t_elapsed_sec'] > 0 or game_state['simulation_paused']):
+             self.draw_vectors(game_state)
+
+
+    def draw_back_button(self):
+        """Draws the Back button."""
+        pygame.draw.rect(self.screen, cfg.GRAY, self.back_button_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        utils.draw_text(cfg.BACK_BUTTON_TEXT, self.font_back_button, cfg.BLACK, self.screen, self.back_button_rect.centerx, self.back_button_rect.centery, center=True)
+
+    def draw_scene_title(self, title):
+        """Draws the current scene title at the top."""
+        # No longer need to adjust Y position based on back button
+        title_y = cfg.SCENE_TITLE_Y
+        if title:
+             utils.draw_text(title, self.font_title, cfg.WHITE, self.screen, cfg.WIDTH / 2, title_y, center=True)
+
+    def draw_formulas(self, game_state):
+        """Draws the formula text display."""
+        line_height = self.font_formula.get_linesize() * cfg.FORMULA_LINE_HEIGHT_MULTIPLIER
+        col1_x = cfg.FORMULA_COL1_X
+        col2_x = cfg.FORMULA_COL2_X
+
+        # Kinematic Equations
+        utils.draw_text("Kinematik Denklemler:", self.font_medium, cfg.WHITE, self.screen, col1_x, cfg.FORMULA_Y_START)
+        utils.draw_text(f"x(t) = V0x * t", self.font_formula, cfg.WHITE, self.screen, col1_x, cfg.FORMULA_Y_START + line_height * 1.2)
+        utils.draw_text(f"y(t) = V0y * t - 0.5 * g * t²", self.font_formula, cfg.WHITE, self.screen, col1_x, cfg.FORMULA_Y_START + line_height * 2.2)
+        utils.draw_text(f"(g = {cfg.G_METERS_PER_SEC2} m/s², V0y yukarı pozitif)", self.font_small, cfg.LIGHT_GRAY, self.screen, col1_x, cfg.FORMULA_Y_START + line_height * 3.2)
+
+        # Instantaneous Calculations
+        current_displacement_x_m = 0.0
+        current_displacement_y_m = 0.0
+        proj = game_state.get('projectile')
+        # Only calculate if simulation has state (avoids errors on first frame/reset)
+        if proj and (game_state.get('simulation_running') or game_state.get('current_t_elapsed_sec') > 0 or game_state.get('simulation_paused')):
+            try:
+                current_displacement_x_m = utils.px_to_m(proj.current_pos_px[0] - proj.initial_pos_px[0])
+                # Physics Y (positive upwards from start)
+                current_displacement_y_m = utils.px_to_m(proj.initial_pos_px[1] - proj.current_pos_px[1])
+            except (AttributeError, IndexError): pass # Ignore errors if projectile state isn't ready
+
+        utils.draw_text("Anlık Hesaplamalar:", self.font_medium, cfg.WHITE, self.screen, col2_x, cfg.FORMULA_Y_START)
+        elapsed_t = game_state.get('current_t_elapsed_sec', 0.0)
+        launch_vx_mps = game_state.get('launch_v0x_mps_display', 0.0)
+        launch_vy_mps = game_state.get('launch_v0y_mps_display', 0.0)
+        x_calc_text = f"ΔX: {current_displacement_x_m:.2f}m = {launch_vx_mps:.2f}m/s * {elapsed_t:.2f}s"
+        y_calc_text = f"ΔY: {current_displacement_y_m:.2f}m = {launch_vy_mps:.2f}m/s * {elapsed_t:.2f}s - 0.5*{cfg.G_METERS_PER_SEC2:.2f}*({elapsed_t:.2f}s)²"
+        utils.draw_text(x_calc_text, self.font_formula, cfg.WHITE, self.screen, col2_x, cfg.FORMULA_Y_START + line_height * 1.2)
+        utils.draw_text(y_calc_text, self.font_formula, cfg.WHITE, self.screen, col2_x, cfg.FORMULA_Y_START + line_height * 2.2)
+
+        # Display Target Time (adjust label based on scene)
+        active_scene_name = game_state.get('active_scene_name')
+        target_time_label = "Hedef t"
+        if active_scene_name == "Yatay Atış":
+             target_time_label = "Hesap. t"
+        elif active_scene_name == "Dikey Atış":
+             target_time_label = "Toplam t"
+        t_target_str_disp = f"{target_time_label} = {game_state.get('time_to_target_sec', 0.0):.2f} s"
+        utils.draw_text(t_target_str_disp, self.font_formula, cfg.WHITE, self.screen, col2_x, cfg.FORMULA_Y_START + line_height * 3.2)
+
+
+    def draw_formula_controls(self, simulation_paused, simulation_speed_multiplier):
+        """Draws the pause/resume and speed control buttons."""
+        pause_text = "Devam Et" if simulation_paused else "Durdur"
+        pygame.draw.rect(self.screen, cfg.LIGHT_GRAY, self.pause_button_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        utils.draw_text(pause_text, self.font_medium, cfg.BLACK, self.screen, self.pause_button_rect.centerx, self.pause_button_rect.centery, center=True)
+        pygame.draw.rect(self.screen, cfg.LIGHT_GRAY, self.speed_minus_button_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        utils.draw_text("-", self.font_large, cfg.BLACK, self.screen, self.speed_minus_button_rect.centerx, self.speed_minus_button_rect.centery, center=True)
+        pygame.draw.rect(self.screen, cfg.LIGHT_GRAY, self.speed_plus_button_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        utils.draw_text("+", self.font_large, cfg.BLACK, self.screen, self.speed_plus_button_rect.centerx, self.speed_plus_button_rect.centery, center=True)
+        speed_text = f"Hız: {simulation_speed_multiplier:.1f}x"
+        utils.draw_text(speed_text, self.font_medium, cfg.WHITE, self.screen, self.speed_minus_button_rect.right + (self.speed_plus_button_rect.left - self.speed_minus_button_rect.right) // 2, self.speed_minus_button_rect.centery, center=True)
+
+    def draw_separator(self):
+        """Draws the line separating formula area from main simulation area."""
+        line_y = cfg.FORMULA_AREA_HEIGHT - cfg.FORMULA_AREA_LINE_Y_OFFSET
+        pygame.draw.line(self.screen, cfg.WHITE, (0, line_y), (cfg.WIDTH, line_y), cfg.FORMULA_AREA_LINE_THICKNESS)
+
+    def draw_sliders(self, projectile, target):
+        """Draws the sliders with handles, labels, and coordinates for ENABLED sliders."""
+        slider_labels = {"circle_x": "Çember X0", "circle_y": "Çember Y0", "box_x": "Kutu X", "box_y": "Kutu Y"}
+        if not projectile or not target: return
+
+        # Iterate ONLY through the sliders enabled for this scene
+        for key in self.sliders_enabled:
+            # Safely get track and handle rects (get_slider_handle_rect checks enablement)
+            track_rect = self.slider_rects_track.get(key)
+            handle_rect = self.get_slider_handle_rect(key)
+
+            # Skip drawing if rects are missing (shouldn't happen for enabled sliders if defined)
+            if not track_rect or not handle_rect:
+                 # print(f"Warning: Missing rect for enabled slider '{key}'") # Optional debug
+                 continue
+
+            # Draw Track and Handle
+            pygame.draw.rect(self.screen, cfg.GRAY, track_rect, border_radius=cfg.SLIDER_TRACK_BORDER_RADIUS)
+            pygame.draw.rect(self.screen, cfg.BLACK, handle_rect, border_radius=cfg.SLIDER_HANDLE_BORDER_RADIUS)
+
+            # Draw Label
+            label_text = slider_labels.get(key, "??")
+            label_x = track_rect.left
+            label_y = track_rect.bottom + cfg.SLIDER_LABEL_Y_OFFSET
+            utils.draw_text(label_text, self.font_small, cfg.WHITE, self.screen, label_x, label_y)
+            label_textobj = self.font_small.render(label_text, True, cfg.WHITE)
+            label_textrect = label_textobj.get_rect(topleft=(label_x, label_y))
+
+            # Draw Coordinate Text
+            coord_text = ""
+            coord_m = 0 # Default
+            try:
+                # Calculate coordinate based on slider key
+                if key == "circle_x":
+                     coord_m = utils.px_to_m(projectile.initial_pos_px[0])
+                     coord_text = f"(X: {coord_m:.1f}m)"
+                elif key == "circle_y":
+                    # Display Y coordinate relative to ground (Pygame Y=HEIGHT is ground)
+                    coord_m = utils.px_to_m(cfg.HEIGHT - projectile.initial_pos_px[1]) # Physics Y relative to ground
+                    coord_text = f"(Y: {coord_m:.1f}m)"
+                elif key == "box_x":
+                     # For box, display center coordinate
+                     coord_m = utils.px_to_m(target.center_pos_px[0])
+                     coord_text = f"(X Mer.: {coord_m:.1f}m)"
+                elif key == "box_y":
+                     # Display box center Y coordinate relative to ground
+                     coord_m = utils.px_to_m(cfg.HEIGHT - target.center_pos_px[1]) # Physics Y relative to ground
+                     coord_text = f"(Y Mer.: {coord_m:.1f}m)"
+
+                # Draw the coordinate text if calculated
+                if coord_text:
+                    coord_x = label_textrect.right + cfg.SLIDER_LABEL_COORD_SPACING_X
+                    coord_y = label_y
+                    utils.draw_text(coord_text, self.font_small, cfg.LIGHT_GRAY, self.screen, coord_x, coord_y)
+            except (IndexError, AttributeError, TypeError, NameError) as e:
+                 # print(f"Error drawing coordinate for slider {key}: {e}") # Optional debug
+                 pass # Don't crash if coordinate calculation fails
+
+    def draw_bottom_controls(self, active_scene_name=None):
+        """Draws the input box and main action buttons, adjusting for scene context."""
+        # Determine Input Box Color
+        input_box_color = cfg.INPUT_BOX_ACTIVE_COLOR if self.input_active else cfg.INPUT_BOX_INACTIVE_COLOR
+        if self.input_error: input_box_color = cfg.ERROR_COLOR
+
+        # Draw Input Box and Border
+        pygame.draw.rect(self.screen, input_box_color, self.input_box_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        pygame.draw.rect(self.screen, cfg.BLACK, self.input_box_rect, cfg.INPUT_BOX_BORDER_WIDTH, border_radius=cfg.BUTTON_BORDER_RADIUS)
+
+        # Draw Text Inside Input Box
+        utils.draw_text(self.time_to_target_str, self.font_medium, cfg.BLACK, self.screen, self.input_box_rect.x + cfg.INPUT_TEXT_X_OFFSET, self.input_box_rect.y + cfg.INPUT_TEXT_Y_OFFSET)
+
+        # Determine and Draw Input Label Text and Color based on Scene
+        input_label_text = "Hedef Süre (s):" # Default
+        input_label_color = cfg.WHITE
+        if active_scene_name == "Yatay Atış":
+            input_label_text = "Hesaplanan Süre:"
+            input_label_color = cfg.GRAY # Gray out as it's calculated
+        elif active_scene_name == "Dikey Atış":
+             input_label_text = "Toplam Süre (s):" # Indicate round trip time
+             input_label_color = cfg.WHITE # User inputs this
+
+        utils.draw_text(input_label_text, self.font_small, input_label_color, self.screen, self.input_box_rect.left, self.input_box_rect.top + cfg.INPUT_LABEL_Y_OFFSET)
+
+        # Draw Error Message if present
+        if self.error_message:
+            error_text_y = self.input_box_rect.top + cfg.INPUT_LABEL_Y_OFFSET - self.font_small.get_height() - 2
+            utils.draw_text(self.error_message, self.font_small, cfg.ERROR_COLOR, self.screen, self.input_box_rect.left, error_text_y)
+
+        # Draw Buttons
+        pygame.draw.rect(self.screen, cfg.LIGHT_GRAY, self.launch_button_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        utils.draw_text("Fırlat", self.font_medium, cfg.BLACK, self.screen, self.launch_button_rect.centerx, self.launch_button_rect.centery, center=True)
+
+        pygame.draw.rect(self.screen, cfg.LIGHT_GRAY, self.restart_button_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        utils.draw_text("Yeniden Başlat", self.font_medium, cfg.BLACK, self.screen, self.restart_button_rect.centerx, self.restart_button_rect.centery, center=True)
+
+        pygame.draw.rect(self.screen, cfg.LIGHT_GRAY, self.toggle_vec_vis_button_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        vec_vis_text = "Vektör Gizle" if self.show_vectors else "Vektör Göster"
+        utils.draw_text(vec_vis_text, self.font_medium, cfg.BLACK, self.screen, self.toggle_vec_vis_button_rect.centerx, self.toggle_vec_vis_button_rect.centery, center=True)
+
+        pygame.draw.rect(self.screen, cfg.LIGHT_GRAY, self.toggle_vec_mode_button_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        vec_mode_text = "Bileşen Göster" if self.show_velocity_vector else "Toplam Hız Göster"
+        utils.draw_text(vec_mode_text, self.font_medium, cfg.BLACK, self.screen, self.toggle_vec_mode_button_rect.centerx, self.toggle_vec_mode_button_rect.centery, center=True)
+
+        pygame.draw.rect(self.screen, cfg.LIGHT_GRAY, self.toggle_vec_type_button_rect, border_radius=cfg.BUTTON_BORDER_RADIUS)
+        vec_type_text = "Hız Vek. Göster" if self.show_acceleration_vector else "İvme Vek. Göster"
+        utils.draw_text(vec_type_text, self.font_medium, cfg.BLACK, self.screen, self.toggle_vec_type_button_rect.centerx, self.toggle_vec_type_button_rect.centery, center=True)
+
+
+    def draw_vectors(self, game_state):
+        """Draws velocity and/or acceleration vectors."""
+        proj = game_state.get('projectile')
+        if not proj: return
+        vx = game_state.get('current_vx_px_s', 0.0)
+        vy = game_state.get('current_vy_px_s', 0.0)
+        center_x = int(proj.current_pos_px[0])
+        center_y = int(proj.current_pos_px[1])
+        vx_mps = utils.px_s_to_mps(vx)
+        vy_mps = utils.px_s_to_mps(-vy) # Physics coords (up positive)
+
+        # Draw Acceleration Vector (always down)
+        if self.show_acceleration_vector:
+            accel_y_px = cfg.GRAVITY_PX_PER_SEC2 # Positive (down in pygame)
+            end_x = center_x
+            # Scale the visual length for better visibility
+            end_y = center_y + accel_y_px * cfg.VECTOR_SCALE * cfg.ACCELERATION_VECTOR_SCALE_MULTIPLIER
+            utils.draw_arrow(self.screen, cfg.GREEN, (center_x, center_y), (end_x, end_y), cfg.VECTOR_ARROW_SIZE)
+            utils.draw_text(f"a: {cfg.G_METERS_PER_SEC2:.2f} m/s²", self.font_small, cfg.GREEN, self.screen, end_x + cfg.VECTOR_TEXT_OFFSET_X, end_y + cfg.VECTOR_TEXT_OFFSET_Y_DOWN)
+        # Draw Velocity Vector(s)
+        else:
+            # Only draw if there's significant velocity
+            if abs(vx) > 1e-6 or abs(vy) > 1e-6:
+                # Combined Velocity Vector
+                if self.show_velocity_vector:
+                    mag_px_s = math.hypot(vx, vy)
+                    end_x = center_x + vx * cfg.VECTOR_SCALE
+                    end_y = center_y + vy * cfg.VECTOR_SCALE
+                    utils.draw_arrow(self.screen, cfg.MAGENTA, (center_x, center_y), (end_x, end_y), cfg.VECTOR_ARROW_SIZE)
+                    mag_mps = utils.px_s_to_mps(mag_px_s)
+                    # Adjust text position based on vector direction
+                    text_x = end_x + cfg.VECTOR_COMBINED_OFFSET * math.copysign(1, vx) if vx != 0 else end_x + cfg.VECTOR_COMBINED_OFFSET
+                    text_y = end_y + (cfg.VECTOR_COMBINED_OFFSET * math.copysign(1, vy) if vy != 0 else cfg.VECTOR_COMBINED_OFFSET)
+                    utils.draw_text(f"Hız: {mag_mps:.2f} m/s", self.font_small, cfg.MAGENTA, self.screen, text_x, text_y)
+                # Velocity Components (Vx and Vy)
+                else:
+                    # Draw Vx only if non-zero
+                    if abs(vx) > 1e-6:
+                        end_x_vx = center_x + vx * cfg.VECTOR_SCALE
+                        end_y_vx = center_y
+                        utils.draw_arrow(self.screen, cfg.WHITE, (center_x, center_y), (end_x_vx, end_y_vx), cfg.VECTOR_ARROW_SIZE)
+                        utils.draw_text(f"Vx: {vx_mps:.2f} m/s", self.font_small, cfg.WHITE, self.screen, end_x_vx + cfg.VECTOR_TEXT_OFFSET_X, end_y_vx + cfg.VECTOR_TEXT_OFFSET_Y_UP)
+                    # Draw Vy only if non-zero
+                    if abs(vy) > 1e-6:
+                        end_x_vy = center_x
+                        end_y_vy = center_y + vy * cfg.VECTOR_SCALE
+                        utils.draw_arrow(self.screen, cfg.BLACK, (center_x, center_y), (end_x_vy, end_y_vy), cfg.VECTOR_ARROW_SIZE)
+                        # Adjust label y position based on vector direction (up/down)
+                        label_y = end_y_vy + cfg.VECTOR_TEXT_OFFSET_Y_DOWN if vy >= 0 else end_y_vy + cfg.VECTOR_TEXT_OFFSET_Y_UP
+                        utils.draw_text(f"Vy: {vy_mps:.2f} m/s", self.font_small, cfg.BLACK, self.screen, end_x_vy + cfg.VECTOR_TEXT_OFFSET_X, label_y)
+
+    def draw_time(self, elapsed_time_sec):
+        """Draws the elapsed simulation time."""
+        time_text_x = cfg.TIME_TEXT_X_OFFSET
+        # Position time text relative to bottom controls
+        time_text_y = cfg.CONTROL_AREA_Y_START - cfg.TIME_TEXT_Y_OFFSET # Place above controls
+        utils.draw_text(f"Geçen Süre: {elapsed_time_sec:.2f} s", self.font_small, cfg.WHITE, self.screen, time_text_x, time_text_y)
+
+================================================================================
+
+(utils.py)
+# utils.py
+import pygame
+import math
+import config as cfg
+
+# --- Unit Conversion ---
+def px_to_m(pixels):
+    """Converts pixels to meters."""
+    if cfg.PIXELS_PER_METER == 0: return 0.0 # Avoid division by zero
+    return pixels / cfg.PIXELS_PER_METER
+
+def m_to_px(meters):
+    """Converts meters to pixels."""
+    return meters * cfg.PIXELS_PER_METER
+
+def px_s_to_mps(pixels_per_second):
+    """Converts pixels per second to meters per second."""
+    if cfg.PIXELS_PER_METER == 0: return 0.0 # Avoid division by zero
+    return pixels_per_second / cfg.PIXELS_PER_METER
+
+def mps_to_px_s(meters_per_second):
+    """Converts meters per second to pixels per second."""
+    return meters_per_second * cfg.PIXELS_PER_METER
+
+# --- Drawing Helpers ---
+def draw_text(text, text_font, color, surface, x, y, center=False, topright=False):
+    """Renders and draws text onto a surface."""
+    if not text_font:
+        print(f"Error: Font not loaded or invalid for text '{text}'")
+        return # Cannot render without a valid font
+    try:
+        textobj = text_font.render(text, True, color)
+        textrect = textobj.get_rect()
+        if center:
+            textrect.center = (int(x), int(y))
+        elif topright:
+            textrect.topright = (int(x), int(y))
+        else:
+            textrect.topleft = (int(x), int(y))
+        surface.blit(textobj, textrect)
+    except Exception as e:
+        print(f"Error rendering or blitting text '{text}': {e}")
+        pass # Optionally, draw placeholder text or log differently
+
+def draw_arrow(surface, color, start, end, arrow_size):
+    """Draws a line with an arrowhead at the end."""
+    line_thickness = cfg.DRAW_ARROW_LINE_THICKNESS
+    try:
+        start_int = (int(start[0]), int(start[1]))
+        end_int = (int(end[0]), int(end[1]))
+        pygame.draw.line(surface, color, start_int, end_int, line_thickness)
+    except Exception as e:
+        print(f"Error drawing line from {start} to {end}: {e}")
+        return # Don't proceed if line fails
+
+    try:
+        # Calculate angle only if start and end are different
+        if start_int == end_int: return # No arrowhead for zero-length line
+        angle = math.atan2(start_int[1] - end_int[1], start_int[0] - end_int[0])
+
+        # Calculate arrowhead points
+        p1x = end_int[0] + arrow_size * math.cos(angle + math.pi / 6)
+        p1y = end_int[1] + arrow_size * math.sin(angle + math.pi / 6)
+        p2x = end_int[0] + arrow_size * math.cos(angle - math.pi / 6)
+        p2y = end_int[1] + arrow_size * math.sin(angle - math.pi / 6)
+
+        # Draw the arrowhead polygon
+        pygame.draw.polygon(surface, color, (end_int, (int(p1x), int(p1y)), (int(p2x), int(p2y))))
+    except (ValueError, OverflowError, TypeError, ZeroDivisionError) as e:
+        # Handle potential math errors or invalid points
+        print(f"Could not draw arrowhead for arrow from {start} to {end}: {e}")
+        pass
+
+================================================================================
+
